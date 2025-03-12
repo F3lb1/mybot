@@ -1,8 +1,10 @@
+import time
+import random
 import telebot
-from bot2 import genpar
+from function import orelresh
 # Замени '' на токен твоего бота
 # Этот токен ты получаешь от BotFather, чтобы бот мог работать
-bot = telebot.TeleBot("Вставь свой токен")
+bot = telebot.TeleBot("7976091685:AAEPLB2ATCLrb8LlKKHGIMvINjEBJwaBUI4")
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -16,12 +18,46 @@ def send_hello(message):
 def send_bye(message):
     bot.reply_to(message, "Пока! Удачи!")
 
-@bot.message_handler(commands=['givemepass'])
+"""@bot.message_handler(commands=['orelresh'])
 def sendpass(message):
-    bot.reply_to(message,genpar())
+    bot.reply_to(message,orelresh())"""
+    
+
+@bot.message_handler(commands=['timer'])
+def timer(message):
+    arg = message.text.split()
+    if len(arg) > 2 and arg[1].isdigit() and arg[2].isdigit():
+        for i in range(int(arg[2])):
+            sec = int(arg[1])
+            bot.reply_to(message, 'BEEP!')
+            time.sleep(sec)      
+    else:
+        bot.reply_to(message, 'Используйте: /set <Колво повторений> <С какой переодичностью(сек)>')
+
+@bot.message_handler(commands=['kubiki'])
+def kubiki(message):
+    chis = message.text.split()
+    kubik = 0
+    if len(chis) == 2:
+        for i in range(int(chis[1])):
+            kubiks=random.randint(1,6)
+            kubik = kubik + kubiks
+        bot.reply_to(message, kubik)
+    else:
+        bot.reply_to(message, "Используйте: /kubiki <Колво кубиков>")
+
+@bot.message_handler(commands=['help'])
+def help(message):
+    bot.reply_to(message,
+    "У нас есть такие команды:"
+    " /hello(поздоровайся с ботом),  "
+    " /bye(попрощайся с ним), "
+    " /orelresh(кинь монетку), "
+    " /timer(запусти таймер), "
+    " /kubiki(кинь сколько хочешь(кубик 6 граный))"
+    "")
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     bot.reply_to(message, message.text)
-
 bot.polling()
